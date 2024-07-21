@@ -9,10 +9,10 @@ require('dotenv').config()
 router.post('/signup', async (req, res) => {
   try {
     // Check if user already exists
-    let existingUser = await UserService.findUser(req.body);
-    if (existingUser) {
-      return res.status(400).json({ message: 'User already exists with that mobile number or email.' });
-    }
+    // let existingUser = await UserService.findUser(req.body);
+    // if (existingUser) {
+    //   return res.status(400).json({ message: 'User already exists with that mobile number or email.' });
+    // }
     // Create new user
     await UserService.createUser(req.body);
     res.status(201).json({ message: 'User created successfully.' });

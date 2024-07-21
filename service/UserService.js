@@ -1,9 +1,22 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
-
+const {client} = require('../db/connection')
 async function createUser(userData) {
-  const newUser = new User(userData);
-  return await newUser.save();
+  // const newUser = new User(userData);
+  // return await newUser.save();
+  let password;
+  if(userData.password){
+     password = await bcrypt.hash(userData.password, 10);
+  }else {
+    throw "password required!"
+  }
+  console.log(password)
+  let query = `insert into users(email, firstname, lastname, phone, password)
+                VALUES($1, $2, $3, $4, $5) RETURNING *`
+   const values = [userData.email, userData.firstName, userData.lastName, userData.phone, password]
+ 
+  const res = await client.query(query, values)
+  console.log(res.rows[0])
 }
 
 async function updateUser(id,userData) {
