@@ -4,8 +4,7 @@ const routes = require('./routes');
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 const dotenv = require('dotenv');
-const {client} = require('./db/connection')
-
+ const {client} = require('./db/connection')
 dotenv.config(); 
 
 const app = express();
