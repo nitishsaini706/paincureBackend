@@ -3,8 +3,9 @@ const bodyParser = require('body-parser');
 const routes = require('./routes');
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
+// const { Client } = require('pg');
+
 const dotenv = require('dotenv');
- const {client} = require('./db/connection')
 dotenv.config(); 
 
 const app = express();
@@ -17,9 +18,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
   (async function(){try {
-    console.log('Connecting to PostgreSQL...');
-    await client.connect();
-    console.log('Connected to PostgreSQL');
+    // console.log('Connecting to PostgreSQL...');
+    // await connect();
+    // console.log('Connected to PostgreSQL');
 
     app.use('/', routes);
     app.get("/", async (req, res) => {
@@ -45,21 +46,23 @@ app.use(bodyParser.urlencoded({ extended: true }));
     });
 
   }catch (error) {
-    console.error('Error connecting to PostgreSQL:', error.message);
+    console.error('Error server starting:', error.message);
     process.exit(1); // Exit with failure status
   }
   }())
 
   // async function connect(retry = 0) {
   //   try {
-  //     const stats = await client.connect();
       
-  //     if (stats) {
+  //   console.log('client', client)
+  //     await client.connect();
+  //     console.log('stats', stats)
+  //     if (stats._connected) {
   //       console.log("Connected to the database successfully.");
   //       return stats;
   //     }
   //   } catch (e) {
-  //     console.error("Database connection failed:", e);
+  //     console.error("Database connection failed:", e );
       
   //     if (retry < 2) { 
   //       console.log(`Retrying... ${retry + 1}`);
