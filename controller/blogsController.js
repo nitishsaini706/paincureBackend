@@ -60,7 +60,7 @@ const updateComment = async (req, res) => {
       const user = req.user;
   
       const blogs = await Blogs.getBlogsByUser(user);
-  
+      console.log('blogs', blogs)
       if (!blogs) {
         return res.status(200).json({ message: 'Blogs not found.' });
       }

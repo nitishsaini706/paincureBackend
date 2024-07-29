@@ -78,8 +78,8 @@ async function getBlogsByUser(user) {
     `;
     const {rows} = await client.query(query);
     client.release();
-    if(rows[0]){
-      return rows[0]
+    if(rows){
+      return rows
     }
     return [];
   }catch(e){
