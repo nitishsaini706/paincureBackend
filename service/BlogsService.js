@@ -13,6 +13,7 @@ async function createBlog(reqBody,user) {
     `;
     console.log('query', query)
     const {rows} = await client.query(query);
+    console.log('query', rows)
     client.release();
     if(rows[0]){
       return rows[0]
