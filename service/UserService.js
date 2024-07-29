@@ -1,40 +1,49 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
-const { client } = require('../db/connection')
+const {client,pool} = require('../db/connection')
+
 async function createUser(userData) {
+  const { email, name, phone, password } = userData;
+
   try {
-    let password;
-    if (userData.password) {
-      password = await bcrypt.hash(userData.password, 10);
-    } else {
-      throw "password required!"
-    }
-    console.log(password, "pass")
-    let query = `insert into users(email, firstname, lastname, phone, password)
-                  VALUES($1, $2, $3, $4, $5) RETURNING *`
-    const values = [userData.email, userData.firstName, userData.lastName, userData.phone, password]
+    const client = await pool.connect();
+    console.log('Connected to PostgreSQL');
 
-    const res = await client.query(query, values)
-    console.log(res.rows[0])
-  } catch (err) {
-    console.log("error in user create service", err)
+    const hashedPassword = await bcrypt.hash(password, 10);
 
+    const query = 'INSERT INTO users (email, name, phone, password) VALUES ($1, $2, $3, $4) RETURNING id';
+    const values = [email, name, phone, hashedPassword];
+
+    const { rows } = await client.query(query, values);
+    const createdUser = rows[0];
+
+    client.release();
+    console.log('Connection released');
+
+    return createdUser;
+  } catch (error) {
+    console.error('Error creating user:', error);
+    throw error;
   }
-
 }
 
 async function findUser(userData) {
   const { name, mobileNo, email, password } = userData;
   try {
-    let query = `select email, password from users where email = '${email}'`
-    const res = await client.query(query);
-    return res.rows[0];
-  } catch (error) {
-    console.log("error in finding user", error)
-    throw error;
-  }
+    const client = await pool.connect();
+    // Use parameterized query to prevent SQL injection
+    const query = 'SELECT email, password FROM users WHERE email = $1';
+    const values = [email];
 
+    const res = await client.query(query, values);
+    client.release();
+    return res.rows.length ? res.rows[0] : {}; // Return the user found
+  } catch (error) {
+    console.error('Error in finding user:', error);
+    throw error; // Rethrow the error for further handling
+  } 
 }
+
 async function updateUser(id, userData) {
   return await User.findByIdAndUpdate(
     id, userData, { new: true });

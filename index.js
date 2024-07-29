@@ -3,10 +3,10 @@ const bodyParser = require('body-parser');
 const routes = require('./routes');
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
-// const { Client } = require('pg');
-
 const dotenv = require('dotenv');
 dotenv.config(); 
+const fs = require('fs');
+const dir = './uploads';
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -17,16 +17,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-  (async function(){try {
-    // console.log('Connecting to PostgreSQL...');
-    // await connect();
-    // console.log('Connected to PostgreSQL');
-
-    app.use('/', routes);
-    app.get("/", async (req, res) => {
-      res.send("Server working fine. Please visit /api-docs for docs");
-    });
-
+(async function(){try {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir);
+  }
+  app.use('/', routes);
+  app.get("/", async (req, res) => {
+    res.send("Server working fine. Please visit /api-docs for docs");
+  });
     // Swagger API documentation setup
     if (swaggerDocument) {
       app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));

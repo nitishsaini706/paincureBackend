@@ -1,14 +1,20 @@
-const pg = require('pg');
-const { Pool, Client } = pg
-require('dotenv').config()
-const DB_URL = process.env.DB_URL
-console.log( DB_URL)
-const pool = new Pool({
-  connectionString: DB_URL
-});
- 
-const client = new Client({
-  connectionString: DB_URL
-});
+// app.js
+const {Client,Pool} = require('pg');
+require('dotenv').config();
 
-module.exports = {client,pool}
+
+const client = new Client({
+  connectionString:process.env.DB_URL
+});
+const pool = new Pool({
+  connectionString:process.env.DB_URL
+});
+// const client = new Client({
+//   host: PGHOST,
+//   database: PGDATABASE,
+//   username: PGUSER,
+//   password: PGPASSWORD,
+//   port: 5432,
+// });
+
+module.exports={client,pool};

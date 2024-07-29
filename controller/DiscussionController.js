@@ -1,4 +1,4 @@
-const DiscussionService = require('../service/DiscussionService');
+const DiscussionService = require('../service/BlogsService');
 
 async function createDiscussion(req, res) {
   try {
