@@ -9,9 +9,9 @@ async function createBlog(reqBody,user) {
     let query = `
     CREATE blogs
     (version, created_by,title,service,body,image,slug,ispublished)
-    VALUES(1,${user.id},${title},${service},${body},${image},${slug},${ispublished})
+    VALUES(1,${user.id},'${title}','${service}','${body}','${image}','${slug}',${ispublished})
     `;
-
+    console.log('query', query)
     const {rows} = await client.query(query);
     client.release();
     if(rows[0]){
@@ -32,7 +32,7 @@ async function updateBlog(id, data,user) {
     let query = `
     Update blogs
     
-    updated_by=${user.id},titl=${title},updated_time=timezone(\'utc\'::text, now()),service=${service},body=${body},image=${image},slug=${slug},ispublished=${ispublished}
+    updated_by=${user.id},title='${title}',updated_time=timezone(\'utc\'::text, now()),service='${service}',body='${body}',image='${image}',slug='${slug}',ispublished=${ispublished}
     where id=${id}
     `;
 
