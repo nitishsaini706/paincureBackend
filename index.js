@@ -4,6 +4,7 @@ const routes = require('./routes');
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 const dotenv = require('dotenv');
+const cors = require('cors');
 dotenv.config(); 
 const fs = require('fs');
 const dir = './uploads';
@@ -12,7 +13,7 @@ const app = express();
 const port = process.env.PORT || 3001;
 const swaggerDocument = YAML.load('./swagger.yaml');
 
-
+app.use(cors())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
