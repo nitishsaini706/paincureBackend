@@ -12,8 +12,8 @@ async function createBlog(reqBody,user) {
     VALUES(1,${user.id},'${title}','${service}','${body}','${image}','${slug}',${ispublished})
     `;
     console.log('query', query)
-    const {rows} = await client.query(query);
-    console.log('query', rows)
+    const res = await client.query(query);
+    console.log('query', res)
     client.release();
     if(rows[0]){
       return rows[0]
