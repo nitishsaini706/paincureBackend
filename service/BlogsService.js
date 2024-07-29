@@ -10,10 +10,9 @@ async function createBlog(reqBody,user) {
     INSERT INTO blogs
     (version, created_by,title,service,body,image,slug,ispublished)
     VALUES(1,${user.id},'${title}','${service}','${body}','${image}','${slug}',${ispublished})
+    returning id
     `;
-    console.log('query', query)
-    const res = await client.query(query);
-    console.log('query', res)
+    const {rows} = await client.query(query);
     client.release();
     if(rows[0]){
       return rows[0]
