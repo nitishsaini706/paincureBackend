@@ -32,7 +32,7 @@ async function findUser(userData) {
   try {
     const client = await pool.connect();
     // Use parameterized query to prevent SQL injection
-    const query = 'SELECT email, password FROM users WHERE email = $1';
+    const query = 'SELECT email, password,name,id FROM users WHERE email = $1';
     const values = [email];
 
     const res = await client.query(query, values);
