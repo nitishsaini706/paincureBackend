@@ -7,7 +7,7 @@ async function createBlog(reqBody,user) {
     const client = await pool.connect();
     const { title, body, image, slug,service,ispublished } = reqBody;
     let query = `
-    CREATE blogs
+    INSERT INTO blogs
     (version, created_by,title,service,body,image,slug,ispublished)
     VALUES(1,${user.id},'${title}','${service}','${body}','${image}','${slug}',${ispublished})
     `;
