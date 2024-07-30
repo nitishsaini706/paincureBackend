@@ -61,12 +61,12 @@ const updateComment = async (req, res) => {
   
       const blogs = await Blogs.getBlogsByUser(user);
       console.log('blogs', blogs)
-      if (!blogs) {
+      if (blogs.length) {
         return res.status(200).json({ message: 'Blogs not found.' });
       }
-      for(let blog of blogs){
-        blog.image = `${req.protocol}://${req.get('host')}/${blog.image}`;
-      }
+      // for(let blog of blogs){
+      //   blog.image = `${req.protocol}://${req.get('host')}/${blog.image}`;
+      // }
       return res.status(200).json({ message: 'Blogs fetched successfully.',blogs:blogs });     
     } catch (error) {
       console.error("erorr in gettting blog by users",error);
@@ -86,7 +86,7 @@ const updateComment = async (req, res) => {
         return res.status(200).json({ message: 'Blog not found for this slug.' });
       }
 
-      blog.image = `${req.protocol}://${req.get('host')}/${blog.image}`;
+      // blog.image = `${req.protocol}://${req.get('host')}/${blog.image}`;
       return res.status(200).json({ message: 'Blog fetched successfully.',blog:blog });     
     } catch (error) {
       console.error("erorr in gettting blog by users",error);
