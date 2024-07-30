@@ -93,6 +93,21 @@ const updateComment = async (req, res) => {
       return res.status(500).json({ message: 'Internal server error' });
     }
   };
+const getBlogWeb = async (req,res) => {
+    try {
+      
+      const blog = await Blogs.getForWeb();
+      if (blog.length == 0) {
+        return res.status(200).json({ message: 'Blog not present.' });
+      }
+
+      // blog.image = `${req.protocol}://${req.get('host')}/${blog.image}`;
+      return res.status(200).json({ message: 'Blog fetched successfully.',blog:blog });     
+    } catch (error) {
+      console.error("erorr in gettting blog by users",error);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+};
 const getBlogByTitle = async (req,res) => {
     try {
       
@@ -120,5 +135,6 @@ const getBlogByTitle = async (req,res) => {
     createComment,
     getBlogsByUser,
     getBlogsById,
-    getBlogByTitle
+    getBlogByTitle,
+    getBlogWeb
   }

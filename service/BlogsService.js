@@ -131,6 +131,26 @@ async function searchByTitle(title) {
     console.log("error in searching blogs service",e);
     throw e;
   }}
+async function getForWeb() {
+  try{
+    const client = await pool.connect();
+    let query = `
+      select bg.title,bg.image,bg.service,bg.body,bg.creation_time,bg.slug,bg.updated_time,bg.ispublished,us.name
+      from blogs bg
+      left join users us on us.id = bg.created_by
+    `;
+    console.log('query', query)
+    const {rows} = await client.query(query);
+    // console.log('rows', rows)
+    if(rows){
+      return rows
+    }
+    client.release();
+    return [];
+  }catch(e){
+    console.log("error in searching blogs service",e);
+    throw e;
+  }}
 
 module.exports = {
   createBlog,
@@ -138,5 +158,6 @@ module.exports = {
   deleteBlog,
   getBlogsByUser,
   searchByTitle,
-  getById
+  getById,
+  getForWeb
 };
