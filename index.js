@@ -8,7 +8,7 @@ const cors = require('cors');
 dotenv.config(); 
 const fs = require('fs');
 const dir = './uploads';
-
+const path = require('path');
 const app = express();
 const port = process.env.PORT || 3001;
 const swaggerDocument = YAML.load('./swagger.yaml');
@@ -16,6 +16,8 @@ const swaggerDocument = YAML.load('./swagger.yaml');
 app.use(cors())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
 (async function(){try {
