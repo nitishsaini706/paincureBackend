@@ -33,12 +33,11 @@ async function updateBlog(id, data,user) {
     const { title, body, image, slug,service,ispublished } = data;
     let query = `
     Update blogs
-    
-    updated_by=${user.id},title='${title}',updated_time=timezone(\'utc\'::text, now()),service='${service}',body='${body}',image='${image}',slug='${slug}',ispublished=${ispublished}
-    where slug=${id}
+    set updated_by=${user.id},title='${title}',updated_time=timezone('utc'::text, now()),service='${service}',body='${body}',image='${image}',slug='${slug}',ispublished=${ispublished}
+    where slug='${id}'
     returning id;
     `;
-
+    console.log('query', query)
     const {rows} = await client.query(query);
     client.release();
     if(rows){
