@@ -115,19 +115,21 @@ async function searchByTitle(title) {
   try{
     const client = await pool.connect();
     let query = `
-      select title,image,service,,creation_by,slug,
+      select title,image,service,body,creation_time,slug,updated_time,ispublished
       from blogs
-      where title=${title}
+      where title ILIKE '%${title}%'
     `;
+    console.log('query', query)
     const {rows} = await client.query(query);
-    if(rows[0]){
-      return rows[0]
+    // console.log('rows', rows)
+    if(rows){
+      return rows
     }
     client.release();
     return [];
   }catch(e){
     console.log("error in searching blogs service",e);
-    return [];
+    throw e;
   }}
 
 module.exports = {
