@@ -54,11 +54,12 @@ async function deleteBlog(id) {
   try{
     const client = await pool.connect();
     let query = `
-      update blog 
+      update blogs 
       set isdeleted=true
-      where slug = ${id}
+      where slug = '${id}'
       returning id;
     `;
+    console.log('query', query)
     const {rows} = await client.query(query);
     client.release();
     if(rows){
