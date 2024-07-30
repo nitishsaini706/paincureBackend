@@ -40,11 +40,11 @@ const updateComment = async (req, res) => {
   // Delete a comment
   const deleteComment = async (req, res, next) => {
     try {
-      const { blogsId } = req.params;
+      const { slug } = req.params;
   
-      const Blog = await Blogs.deleteBlog(blogsId);
+      const Blog = await Blogs.deleteBlog(slug);
   
-      if (!Blog) {
+      if (Blog.length == 0) {
         return res.status(200).json({ message: 'Blog not found.' });
       }
   
@@ -83,7 +83,7 @@ const updateComment = async (req, res) => {
       }
       const blog = await Blogs.getById(id);
       if (Object.keys(blog).length) {
-        return res.status(200).json({ message: 'Blog not found for this id.' });
+        return res.status(200).json({ message: 'Blog not found for this slug.' });
       }
 
       blog.image = `${req.protocol}://${req.get('host')}/${blog.image}`;

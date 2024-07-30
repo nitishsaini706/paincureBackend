@@ -56,17 +56,18 @@ async function deleteBlog(id) {
     let query = `
       update blog 
       set isdeleted=true
-      where id = ${id}
+      where slug = ${id}
+      returning id;
     `;
     const {rows} = await client.query(query);
     client.release();
-    if(rows[0]){
-      return rows[0]
+    if(rows){
+      return rows
     }
-    return {};
+    return [];
   }catch(e){
     console.log("error in delete blogs service",e);
-    return {};
+    return [];
   }
 }
 
@@ -95,7 +96,7 @@ async function getById(id) {
     let query = `
       select title,image,service,body,creation_time,slug,updated_time,ispublished
       from blogs
-      where id=${id} and isdeleted=false
+      where slug=${id} and isdeleted=false
     `;
     const {rows} = await client.query(query);
     client.release();
