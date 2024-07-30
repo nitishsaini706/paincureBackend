@@ -97,11 +97,11 @@ async function getById(id) {
     let query = `
       select title,image,service,body,creation_time,slug,updated_time,ispublished
       from blogs
-      where slug=${id} and isdeleted=false
+      where slug='${id}' and isdeleted=false
     `;
     const {rows} = await client.query(query);
     client.release();
-    if(rows[0]){
+    if(rows && rows[0]){
       return rows[0];
     }
     return {};

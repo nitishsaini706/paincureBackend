@@ -8,6 +8,6 @@ router.post('/',auth ,blogsController.createComment);
 router.put('/:slug',auth, blogsController.updateComment);
 router.delete('/:slug',auth, blogsController.deleteComment);
 router.get('/',auth, blogsController.getBlogsByUser);
-router.get('/:id',auth, blogsController.getBlogsById);
+router.get('/:slug',auth, blogsController.getBlogsById);
 
 module.exports = router;

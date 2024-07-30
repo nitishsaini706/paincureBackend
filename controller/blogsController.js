@@ -76,18 +76,18 @@ const updateComment = async (req, res) => {
   const getBlogsById = async (req,res) => {
     try {
       const user = req.user;
-  
-      const id = req.params;
-      if (!id) {
-        return res.status(200).json({ message: 'id not found.' });
+      const {slug} = req.params;
+      console.log('slug', slug)
+      if (!slug) {
+        return res.status(200).json({ message: 'slug not found.' });
       }
-      const blog = await Blogs.getById(id);
-      if (Object.keys(blog).length) {
+      const blog = await Blogs.getById(slug);
+      if (Object.keys(blog).length == 0) {
         return res.status(200).json({ message: 'Blog not found for this slug.' });
       }
 
       blog.image = `${req.protocol}://${req.get('host')}/${blog.image}`;
-      return res.status(200).json({ message: 'Blog fetched successfully.',blogs:blog });     
+      return res.status(200).json({ message: 'Blog fetched successfully.',blog:blog });     
     } catch (error) {
       console.error("erorr in gettting blog by users",error);
       return res.status(500).json({ message: 'Internal server error' });
