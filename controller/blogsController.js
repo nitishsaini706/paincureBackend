@@ -7,7 +7,7 @@ const createComment = async (req, res) => {
     const user = req.user;
 
     const newComment = await Blogs.createBlog(content,user); 
-    if(newComment){
+    if(newComment.length == 0){
       
       return res.status(400).json({ message: 'Not able to create Blog' });
     }

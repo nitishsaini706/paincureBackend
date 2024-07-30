@@ -16,13 +16,13 @@ async function createBlog(reqBody,user) {
     const {rows} = await client.query(query);
     console.log('rows', rows)
     client.release();
-    if(rows[0]){
-      return rows[0]
+    if(rows){
+      return rows
     }
-    return {};
+    return [];
   }catch(e){
     console.log("error in creating blog",e);
-    return {};
+    return [];
   }
     
 }
