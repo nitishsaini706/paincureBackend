@@ -20,13 +20,13 @@ const createComment = async (req, res) => {
 
 const updateComment = async (req, res) => {
     try {
-      const { id } = req.params;
+      const { slug } = req.params;
       const data = req.body;
       const user = req.user;
   
-      const comment = await Comment.updateBlog(id,data, user);
+      const comment = await Blogs.updateBlog(slug,data, user);
   
-      if (!comment) {
+      if (comment.length == 0) {
         return res.status(200).json({ message: 'Blog not found.' });
       }
   

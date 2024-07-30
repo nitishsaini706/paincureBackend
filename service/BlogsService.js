@@ -35,18 +35,19 @@ async function updateBlog(id, data,user) {
     Update blogs
     
     updated_by=${user.id},title='${title}',updated_time=timezone(\'utc\'::text, now()),service='${service}',body='${body}',image='${image}',slug='${slug}',ispublished=${ispublished}
-    where id=${id}
+    where slug=${id}
+    returning id;
     `;
 
     const {rows} = await client.query(query);
     client.release();
-    if(rows[0]){
-      return rows[0];
+    if(rows){
+      return rows;
     }
-    return {};
+    return [];
   }catch(e){
     console.log("error in updating blog",e);
-    return {};
+    throw e;
   }
 }
 
