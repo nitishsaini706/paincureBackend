@@ -95,9 +95,10 @@ async function getById(id) {
   try{
     const client = await pool.connect();
     let query = `
-      select title,image,service,body,creation_time,slug,updated_time,ispublished
-      from blogs
-      where slug='${id}' and isdeleted=false
+      select bg.title,bg.image,bg.service,bg.body,bg.creation_time,bg.slug,bg.updated_time,bg.ispublished,us.name
+      from blogs bg
+      left join users us on us.id = bg.created_by
+      where bg.slug='${id}' and bg.isdeleted=false
     `;
     const {rows} = await client.query(query);
     client.release();
