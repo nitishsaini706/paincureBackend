@@ -9,7 +9,7 @@ router.post('/',auth ,blogsController.createComment);
 router.put('/:slug',auth, blogsController.updateComment);
 router.delete('/:slug',auth, blogsController.deleteComment);
 router.get('/',auth, blogsController.getBlogsByUser);
-router.get('/:slug',auth, blogsController.getBlogsById);
+router.get('/:slug', blogsController.getBlogsById);
 router.post('/title',auth, blogsController.getBlogByTitle);
 
 module.exports = router;
