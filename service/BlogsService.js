@@ -139,6 +139,7 @@ async function getForWeb() {
       select bg.title,bg.image,bg.service,bg.body,bg.creation_time,bg.slug,bg.updated_time,bg.ispublished,us.name
       from blogs bg
       left join users us on us.id = bg.created_by
+      order by creation_time
     `;
     console.log('query', query)
     const {rows} = await client.query(query);
