@@ -83,6 +83,17 @@ const followUser = async (req, res, next) => {
     res.status(500).json({ message: error.message });
   }
   };
+  const whatsappInfo = async (req, res) => {
+    const body = req.body;
+
+  try {
+    const result = await UserService.whatsappInfo(body);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+  };
 module.exports = {
   createUser,
   updateUser,
@@ -90,5 +101,6 @@ module.exports = {
   getUsers,
   searchUsersByName,
   unfollowUser,
-  followUser
+  followUser,
+  whatsappInfo
 };

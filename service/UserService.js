@@ -1,6 +1,6 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
-const {client,pool} = require('../db/connection')
+const {pool} = require('../db/connection')
 
 async function createUser(userData) {
   const { email, name, phone, password } = userData;
@@ -90,6 +90,30 @@ async function unfollowUser(userId, userIdToUnfollow) {
     throw new Error('Internal server error.');
   }
 };
+async function whatsappInfo(body) {
+  try {
+    const {name,phone,service} = body;
+
+    const client = await pool.connect();
+    let query = `
+    INSERT INTO leads
+    (version, name,phone,service)
+    VALUES(1,'${name}','${phone}','${service}')
+    returning id
+    `;
+    console.log('query', query)
+    const {rows} = await client.query(query);
+    console.log('rows', rows)
+    client.release();
+    if(rows){
+      return rows
+    }
+    return [];
+  }catch(e){
+    console.log("error in creating blog",e);
+    return [];
+  }
+};
 async function comparePassword(password, candidatePassword) {
   return await bcrypt.compare(candidatePassword, password);
 };
@@ -102,5 +126,6 @@ module.exports = {
   unfollowUser,
   followUser,
   findUser,
-  comparePassword
+  comparePassword,
+  whatsappInfo
 };

@@ -3,6 +3,7 @@ const router = express.Router();
 const UserController = require('../controller/UserController');
 const auth = require("../utils/auth");
 
+router.post('/whatsapp',UserController.whatsappInfo);
 router.post('/', auth,UserController.createUser);
 router.post('/:id',auth ,UserController.updateUser);
 router.delete('/:id', auth,UserController.deleteUser);
