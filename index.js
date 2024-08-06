@@ -51,29 +51,3 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
     process.exit(1); // Exit with failure status
   }
   }())
-
-  // async function connect(retry = 0) {
-  //   try {
-      
-  //   console.log('client', client)
-  //     await client.connect();
-  //     console.log('stats', stats)
-  //     if (stats._connected) {
-  //       console.log("Connected to the database successfully.");
-  //       return stats;
-  //     }
-  //   } catch (e) {
-  //     console.error("Database connection failed:", e );
-      
-  //     if (retry < 2) { 
-  //       console.log(`Retrying... ${retry + 1}`);
-  //       return connect(retry + 1); 
-  //     } else {
-  //       console.log("Max DB retry limit reached.");
-  //       throw new Error("Failed to connect to the database after multiple attempts.");
-  //     }
-  //   }
-  // }
-  
-
-// module.exports = client; // Export the PostgreSQL client if needed in other parts of the application

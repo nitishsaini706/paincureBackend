@@ -14,13 +14,17 @@ const createComment = async (req, res) => {
     return res.status(200).json({ message: 'Blog created successfully.' });
   } catch (error) {
     console.error("error in creating Blogs",error);
-    return res.status(500).json({ message: 'Internal server error' });
+    return res.status(500).json({ message: error });
   }
 };
 
 const updateComment = async (req, res) => {
     try {
       const { slug } = req.params;
+      if(!slug){
+        return res.status(400).json({ message: 'Slug not found.' });
+
+      }
       const data = req.body;
       const user = req.user;
   
@@ -33,7 +37,7 @@ const updateComment = async (req, res) => {
       return res.status(200).json({ message: 'Blog updated successfully.' });
     } catch (error) {
       console.error("error in updating blogs",error);
-      return res.status(500).json({ message: 'Internal server error' });
+      return res.status(500).json({ message: error });
     }
   };
   
@@ -51,7 +55,7 @@ const updateComment = async (req, res) => {
       return res.status(200).json({ message: 'Blog deleted successfully.' });
     } catch (error) {
       console.error("error in deleting ublog",error);
-      return res.status(500).json({ message: 'Internal server error' });
+      return res.status(500).json({ message: error });
     }
   };
   
@@ -70,7 +74,7 @@ const updateComment = async (req, res) => {
       return res.status(200).json({ message: 'Blogs fetched successfully.',blogs:blogs });     
     } catch (error) {
       console.error("erorr in gettting blog by users",error);
-      return res.status(500).json({ message: 'Internal server error' });
+      return res.status(500).json({ message: error });
     }
   };
   const getBlogsById = async (req,res) => {
@@ -90,7 +94,7 @@ const updateComment = async (req, res) => {
       return res.status(200).json({ message: 'Blog fetched successfully.',blog:blog });     
     } catch (error) {
       console.error("erorr in gettting blog by users",error);
-      return res.status(500).json({ message: 'Internal server error' });
+      return res.status(500).json({ message: error });
     }
   };
 const getBlogWeb = async (req,res) => {
@@ -105,7 +109,7 @@ const getBlogWeb = async (req,res) => {
       return res.status(200).json({ message: 'Blog fetched successfully.',blog:blog });     
     } catch (error) {
       console.error("erorr in gettting blog by users",error);
-      return res.status(500).json({ message: 'Internal server error' });
+      return res.status(500).json({ message: error });
     }
 };
 const getBlogByTitle = async (req,res) => {
@@ -125,7 +129,7 @@ const getBlogByTitle = async (req,res) => {
       return res.status(200).json({ message: 'Blog fetched successfully.',blog:blog });     
     } catch (error) {
       console.error("erorr in gettting blog by users",error);
-      return res.status(500).json({ message: 'Internal server error' });
+      return res.status(500).json({ message: error });
     }
 };
 

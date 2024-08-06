@@ -28,12 +28,12 @@ async function createUser(userData) {
 }
 
 async function findUser(userData) {
-  const { name, mobileNo, email, password } = userData;
+  const { name, phone, email, password } = userData;
   try {
     const client = await pool.connect();
     // Use parameterized query to prevent SQL injection
-    const query = 'SELECT email, password,name,id,image FROM users WHERE email = $1';
-    const values = [email];
+    const query = 'SELECT email, password,name,id,image FROM users WHERE email = $1 OR phone=$2';
+    const values = [email,phone];
 
     const res = await client.query(query, values);
     client.release();
@@ -43,15 +43,89 @@ async function findUser(userData) {
     throw error; // Rethrow the error for further handling
   } 
 }
+async function getUser(id) {
+  try {
+    const client = await pool.connect();
+    // Use parameterized query to prevent SQL injection
+    const query = `SELECT us.email,us.name,us.id,us.image,us.bio,us.degree,us.phone,us.role,
+    av.monday,av.tuesday,av.wednesday,av.thursday,av.friday,av.saturday,av.sunday=$7
+    LEFT JOIN availability as av on av.id = us.avail_id
+    FROM users us WHERE id = $1`;
+    const values = [id];
 
-async function updateUser(id, userData) {
-  return await User.findByIdAndUpdate(
-    id, userData, { new: true });
+    const res = await client.query(query, values);
+    client.release();
+    return res.rows.length ? res.rows : []; // Return the user found
+  } catch (error) {
+    console.error('Error in finding user:', error);
+    throw error; // Rethrow the error for further handling
+  } 
 }
+
+async function updateUser(user, userData) {
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+
+    let query = `
+      UPDATE users
+      SET name = $1, phone = $2, image = $3
+      WHERE id = $4
+    `;
+    let values = [userData.name, userData.phone, userData.image, user.id];
+
+    await client.query(query, values);
+
+    query = `
+      UPDATE availability
+      SET monday = $1, tuesday = $2, wednesday = $3, thursday = $4, 
+          friday = $5, saturday = $6, sunday = $7
+      WHERE id = $8
+    `;
+    values = [
+      userData.monday,
+      userData.tuesday,
+      userData.wednesday,
+      userData.thursday,
+      userData.friday,
+      userData.saturday,
+      userData.sunday,
+      user.avail_id,
+    ];
+
+    await client.query(query, values);
+
+    await client.query('COMMIT');
+
+    return [{ success: true }]; 
+  } catch (error) {
+    // Rollback the transaction in case of error
+    await client.query('ROLLBACK');
+    console.error('Error in updating user:', error);
+    throw error; // Rethrow the error for further handling
+  } finally {
+    client.release(); // Ensure the client is released
+  }
+}
+
 
 async function deleteUser(id) {
-  return await User.findByIdAndDelete(id);
-}
+  try {
+    const client = await pool.connect();
+    // Use parameterized query to prevent SQL injection
+    const query = `Update users
+    set isdeleted=true
+    where id=$1
+    `;
+    const values = [id];
+
+    const res = await client.query(query, values);
+    client.release();
+    return res.rows.length ? res.rows[0] : []; // Return the user found
+  } catch (error) {
+    console.error('Error in deleeting user:', error);
+    throw error; // Rethrow the error for further handling
+  } }
 
 async function getUsers() {
   return await User.find();
@@ -60,36 +134,7 @@ async function getUsers() {
 async function searchUsersByName(name) {
   return await User.find({ name: { $regex: name, $options: 'i' } });
 }
-async function followUser(userId, userIdToFollow) {
-  try {
-    const user = await User.findById(userId);
-    if (!user) {
-      throw new Error('User not found.');
-    }
 
-    await user.follow(userIdToFollow);
-    return { success: true, message: 'User followed successfully.' };
-  } catch (error) {
-    console.error(error);
-    throw new Error('Internal server error.');
-  }
-};
-
-// Unfollow a user
-async function unfollowUser(userId, userIdToUnfollow) {
-  try {
-    const user = await User.findById(userId);
-    if (!user) {
-      throw new Error('User not found.');
-    }
-
-    await user.unfollow(userIdToUnfollow);
-    return { success: true, message: 'User unfollowed successfully.' };
-  } catch (error) {
-    console.error(error);
-    throw new Error('Internal server error.');
-  }
-};
 async function whatsappInfo(body) {
   try {
     const {name,phone,service} = body;
@@ -123,9 +168,8 @@ module.exports = {
   deleteUser,
   getUsers,
   searchUsersByName,
-  unfollowUser,
-  followUser,
   findUser,
   comparePassword,
-  whatsappInfo
+  whatsappInfo,
+  getUser
 };
