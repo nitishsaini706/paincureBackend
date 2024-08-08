@@ -8,8 +8,9 @@ async function createAssessmentForm(userData) {
     const client = await pool.connect();
     console.log('Connected to PostgreSQL');
 
-    const query = 'INSERT INTO assessments(email, full_name, age, gender, company_name, designation, sit_time, exercise_time, physical_activity,' +
-    'sleep_time, medical_condition, medications, surgeries, services_interest, goals) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) RETURNING id';
+    // const query = 'INSERT INTO assessments(email, full_name, age, gender, company_name, designation, sit_time, exercise_time, physical_activity,' +
+    // 'sleep_time, medical_condition, medications, surgeries, services_interest, goals) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) RETURNING id';
+    const query = 'INSERT INTO assessments(services_interest) VALUES ($1) RETURNING id';
     const values = [userData];
 
     const { rows } = await client.query(query, values);
