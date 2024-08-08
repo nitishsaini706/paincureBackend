@@ -4,6 +4,7 @@ const userRoutes = require('./userRoutes');
 const commentRoutes = require('./blogs');
 const authRoutes = require('./authRoutes');
 const appointmentRoutes = require('./appointmentRoutes');
+const assessmentRoutes = require('./assessmentRoutes')
 const patientsRoutes = require('./patientsRoutes');
 const availabilityRoutes = require('./availabilityRoutes');
 const programRoutes = require('./programRoutes');
@@ -18,6 +19,7 @@ router.use('/api/users', userRoutes);
 router.use('/api/blogs', commentRoutes);
 router.use('/api/auth', authRoutes);
 router.use('/api/appointments', appointmentRoutes);
+router.use('/api/assessments', assessmentRoutes);
 router.use('/api/patients', patientsRoutes); 
 router.use('/api/availability', availabilityRoutes); 
 router.use('/api/program', programRoutes); 
