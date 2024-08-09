@@ -25,7 +25,29 @@ async function createAssessmentForm(userData) {
     throw error;
   }
 }
+async function getFormData() {
+  
+
+  try {
+    const client = await pool.connect();
+    console.log('Connected to PostgreSQL');
+
+    
+    const query = 'SELECT services_interest FROM assessments where isdeleted=false ORDER BY creation_time ';
+
+    const { rows } = await client.query(query);
+
+    client.release();
+    console.log('Connection released');
+
+    return rows.length ? rows : [];
+  } catch (error) {
+    console.error('Error creating user:', error);
+    throw error;
+  }
+}
 
 module.exports = { 
-    createAssessmentForm
+    createAssessmentForm,
+    getFormData
 }
