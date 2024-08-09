@@ -15,7 +15,7 @@ async function createAssessmentForm(userData) {
     const query = 'INSERT INTO assessments(services_interest) VALUES ($1) RETURNING id';
     // const values = [email, fullName, age, gender, companyName, designation, sittingHours, exercise, activities, sleepHours,medicalConditions, medications, surgeries, services, goals, height, weight ];
   console.log("query",query,userData)
-    const { rows } = await client.query(query, userData);
+    const { rows } = await client.query(query, [userData]);
     const data = rows[0];
 
     client.release();
