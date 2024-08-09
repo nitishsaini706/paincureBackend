@@ -34,7 +34,7 @@ async function getFormData() {
     console.log('Connected to PostgreSQL');
 
     
-    const query = 'SELECT services_interest FROM assessments where isdeleted=false ORDER BY creation_time ';
+    const query = 'SELECT * FROM assessments where isdeleted=false ORDER BY creation_time ';
 
     const { rows } = await client.query(query);
 
