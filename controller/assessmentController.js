@@ -20,19 +20,26 @@ const getFormData = async(req, res)=> {
         const jsonStrings = cleanedString.split('","');
         console.log('jsonStrings', jsonStrings)
         
-        const resultArray = jsonStrings.map(jsonString => {
+        const resultArray = jsonStrings.map((jsonString,index) => {
           // Remove the extra escape characters
-          const formattedString = jsonString.replace(/\\"/g, '"');
-          console.log('formattedString', formattedString)
+          let formattedString = jsonString.replace(/\\"/g, '"');
           // Parse the JSON string
           try {
+            if(index == 0){
+
+              formattedString=formattedString.replace(/"{/, '{');
+            }
+            if(index == jsonStrings.length-1 ){
+              formattedString=formattedString.replace(/"$/, '');
+            }
+            console.log('first', formattedString)
             return JSON.parse(formattedString);
           } catch (error) {
             console.error("Error parsing JSON:", error);
             return null; // Return null or handle the error as needed
           }
         }).filter(item => item !== null); 
-        console.log('resultArray', resultArray)
+        // console.log('resultArray', resultArray)
         finalData.push(resultArray);
       }
 
